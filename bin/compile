@@ -11,27 +11,35 @@ CACHE_DIR=$2
 ENV_DIR=$3
 
 BUILDPACK_DIR=$(cd "$(dirname "$0")"; cd ..; pwd)
+REPO_TOKEN = ""
 
 # Load formating tools
 source "$BUILDPACK_DIR/bin/common.sh"
+
+ls $ENV_DIR | indent
+exit 0
+
 
 # Install runner
 # See https://github.com/actions/runner/releases
 topic "Installing Github runner"
 mkdir $BUILD_DIR/actions-runner && cd $BUILD_DIR/actions-runner
-curl -O -L https://github.com/actions/runner/releases/download/v2.286.1/actions-runner-linux-x64-2.286.1.tar.gz | indent
+
+# Download the latest runner package
+# TODO: Cache file to cache dir
+curl -o actions-runner-linux-x64-2.287.1.tar.gz -L https://github.com/actions/runner/releases/download/v2.287.1/actions-runner-linux-x64-2.287.1.tar.gz | indent
+
+# Optional: Validate the hash
+echo "8fa64384d6fdb764797503cf9885e01273179079cf837bfc2b298b1a8fd01d52  actions-runner-linux-x64-2.287.1.tar.gz" | shasum -a 256 -c | indent
+
+# Extract the installer
 tar xzf ./actions-runner-linux-x64-2.286.1.tar.gz | indent
-topic "installed " `./config.sh --version`
+echo "installed " `./config.sh --version` | indent
 
-# Configure runner
-# ./config.sh --unattended --url <url> --token <token>
-# ./config.sh --unattended --url <url> --token <token> --replace [--name <name>]
-# PROFILE_PATH="$BUILD_DIR/.profile.d/jq.sh"
-# mkdir -p $(dirname $PROFILE_PATH)
+# Create the runner and start the configuration experience
+topic "Configuring runner"
+./config.sh --url https://github.com/Airbase/airbase-backend --token $REPO_TOKEN | indent
 
-# function set-default-env (){
-#   echo "export $1=\$$1:/app/vendor/jq/$2" >> $PROFILE_PATH
-# }
-
-# set-default-env LD_LIBRARY_PATH "lib"
-# set-default-env PATH "bin"
+# Last step, run it!
+topic "Starting runner"
+./run.sh
