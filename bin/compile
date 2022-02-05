@@ -11,8 +11,10 @@ CACHE_DIR=$2
 ENV_DIR=$3
 
 BUILDPACK_DIR=$(cd "$(dirname "$0")"; cd ..; pwd)
+
+
 # TODO: Check if exists otherwise exit 0
-GITHUB_ACTION_TOKEN=$(cat $ENV_VAR/GITHUB_ACTION_TOKEN)
+GITHUB_ACTION_TOKEN=$(cat $ENV_DIR/GITHUB_ACTION_TOKEN)
 
 # Load formating tools
 source "$BUILDPACK_DIR/bin/common.sh"
