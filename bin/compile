@@ -11,13 +11,11 @@ CACHE_DIR=$2
 ENV_DIR=$3
 
 BUILDPACK_DIR=$(cd "$(dirname "$0")"; cd ..; pwd)
+# TODO: Check if exists otherwise exit 0
+GITHUB_ACTION_TOKEN=$(cat $ENV_VAR/GITHUB_ACTION_TOKEN)
 
 # Load formating tools
 source "$BUILDPACK_DIR/bin/common.sh"
-
-cd $ENV_DIR
-ls
-exit 0
 
 # Install runner
 # See https://github.com/actions/runner/releases
@@ -37,7 +35,7 @@ echo "installed " `./config.sh --version` | indent
 
 # Create the runner and start the configuration experience
 topic "Configuring runner"
-./config.sh --url https://github.com/Airbase/airbase-backend --token $REPO_TOKEN | indent
+./config.sh --url https://github.com/Airbase/airbase-backend --token $GITHUB_ACTION_TOKEN | indent
 
 # Last step, run it!
 topic "Starting runner"
