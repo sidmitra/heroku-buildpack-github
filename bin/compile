@@ -11,14 +11,13 @@ CACHE_DIR=$2
 ENV_DIR=$3
 
 BUILDPACK_DIR=$(cd "$(dirname "$0")"; cd ..; pwd)
-REPO_TOKEN = ""
 
 # Load formating tools
 source "$BUILDPACK_DIR/bin/common.sh"
 
-ls $ENV_DIR | indent
+cd $ENV_DIR
+ls
 exit 0
-
 
 # Install runner
 # See https://github.com/actions/runner/releases
