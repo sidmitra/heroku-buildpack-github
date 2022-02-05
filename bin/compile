@@ -12,7 +12,6 @@ ENV_DIR=$3
 
 BUILDPACK_DIR=$(cd "$(dirname "$0")"; cd ..; pwd)
 
-
 # TODO: Check if exists otherwise exit 0
 GITHUB_ACTION_TOKEN=$(cat $ENV_DIR/GITHUB_ACTION_TOKEN)
 
@@ -26,13 +25,13 @@ mkdir $BUILD_DIR/actions-runner && cd $BUILD_DIR/actions-runner
 
 # Download the latest runner package
 # TODO: Cache file to cache dir
-curl -o actions-runner-linux-x64-2.287.1.tar.gz -L https://github.com/actions/runner/releases/download/v2.287.1/actions-runner-linux-x64-2.287.1.tar.gz | indent
+curl -o actions-runner-linux.tar.gz -L https://github.com/actions/runner/releases/download/v2.287.1/actions-runner-linux-x64-2.287.1.tar.gz | indent
 
 # Optional: Validate the hash
 echo "8fa64384d6fdb764797503cf9885e01273179079cf837bfc2b298b1a8fd01d52  actions-runner-linux-x64-2.287.1.tar.gz" | shasum -a 256 -c | indent
 
 # Extract the installer
-tar xzf ./actions-runner-linux-x64-2.286.1.tar.gz | indent
+tar xzf ./actions-runner-linux.tar.gz | indent
 echo "installed " `./config.sh --version` | indent
 
 # Create the runner and start the configuration experience
